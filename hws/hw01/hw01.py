@@ -98,6 +98,7 @@ def with_if_function():
     >>> print(result)
     None
     """
+    "call expression, all args would be evaluated before calling"
     return if_function(cond(), true_func(), false_func())
 
 def cond():
@@ -139,5 +140,5 @@ def hailstone(x):
         length = length + 1
 
     print(x)
-    
+
     return length
