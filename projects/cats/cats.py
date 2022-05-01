@@ -348,24 +348,24 @@ def faster_autocorrect(user_word, valid_words, diff_function, limit):
     cached_so_far = {}
     words_diff = {}
     for w in valid_words:
-        words_diff[w,w,diff_function] = 0
-        cached_so_far[w,diff_function] = w
+        words_diff[w,w] = 0
+        cached_so_far[w] = w
 
-    if (user_word,diff_function) in cached_so_far:
-        if words_diff[user_word,cached_so_far[user_word,diff_function],diff_function] > limit:
+    if (user_word) in cached_so_far:
+        if words_diff[user_word,cached_so_far[user_word]] > limit:
             return user_word
         else:
-            return cached_so_far[user_word,diff_function]
+            return cached_so_far[user_word]
     else:
         for w in valid_words:
-            if ~((user_word,w,diff_function) in words_diff):
-                words_diff[user_word,w,diff_function] = memo(diff_function)(user_word, w, limit)
-        similar_word = min(valid_words, key=lambda w: words_diff[user_word,w,diff_function])
-        if words_diff[user_word,similar_word,diff_function] > limit:
+            if ~((user_word,w) in words_diff):
+                words_diff[user_word,w] = memo(diff_function)(user_word, w, limit)
+        similar_word = min(valid_words, key=lambda w: words_diff[user_word,w])
+        if words_diff[user_word,similar_word] > limit:
             ret_word =  user_word
         else:
             ret_word =  similar_word
-        cached_so_far[user_word,diff_function] = similar_word
+        cached_so_far[user_word] = similar_word
     return ret_word
     # END PROBLEM EC2
 
