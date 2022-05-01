@@ -339,33 +339,33 @@ def memo(f):
 key_distance_diff = memo(key_distance_diff)
 key_distance_diff = count(key_distance_diff)
 
-# I can not understand the testing strategy well
+words_diff = {}
+cached_so_far = {}
+
 def faster_autocorrect(user_word, valid_words, diff_function, limit):
     """A memoized version of the autocorrect function implemented above."""
 
     # BEGIN PROBLEM EC2
     "*** YOUR CODE HERE ***"
-    cached_so_far = {}
-    words_diff = {}
     for w in valid_words:
-        words_diff[w,w] = 0
-        cached_so_far[w] = w
+        words_diff[w,w,diff_function] = 0
+        cached_so_far[w,diff_function] = w
 
-    if (user_word) in cached_so_far:
-        if words_diff[user_word,cached_so_far[user_word]] > limit:
+    if (user_word,diff_function) in cached_so_far:
+        if words_diff[user_word,cached_so_far[user_word,diff_function],diff_function] > limit:
             return user_word
         else:
-            return cached_so_far[user_word]
+            return cached_so_far[user_word,diff_function]
     else:
         for w in valid_words:
-            if ~((user_word,w) in words_diff):
-                words_diff[user_word,w] = memo(diff_function)(user_word, w, limit)
-        similar_word = min(valid_words, key=lambda w: words_diff[user_word,w])
-        if words_diff[user_word,similar_word] > limit:
+            if ~((user_word,w,diff_function) in words_diff):
+                words_diff[user_word,w,diff_function] = memo(diff_function)(user_word, w, limit)
+        similar_word = min(valid_words, key=lambda w: words_diff[user_word,w,diff_function])
+        if words_diff[user_word,similar_word,diff_function] > limit:
             ret_word =  user_word
         else:
             ret_word =  similar_word
-        cached_so_far[user_word] = similar_word
+        cached_so_far[user_word,diff_function] = similar_word
     return ret_word
     # END PROBLEM EC2
 
