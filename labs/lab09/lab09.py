@@ -148,6 +148,7 @@ def reverse_other(t):
     label_list = []
     for b in t.branches:
         label_list.append(b.label)
+    # perfect method
     for b, new_label in zip(t.branches, reversed(label_list)):
         b.label = new_label
         for bb in b.branches:
